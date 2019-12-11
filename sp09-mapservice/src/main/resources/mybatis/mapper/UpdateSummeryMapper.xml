@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaohei.sp09.mapper.UpdateSummeryMapper">
+<!-- 取出总和 -->
+<select id="countTotal" resultType="com.xiaohei.sp09.pojo.CountSummery">
+select sum(vistorNums)as vistorSum ,sum(particiNums) as particiSum,plantsNums as plantsSum from tb_summery
+</select>
+<!-- 每晚24点插入当天 -->
+<insert id="saveSummery">
+ INSERT INTO tb_summery(id,date,vistorNums,particiNums,plantsNums) VALUES(NULL,NOW(),#{vistorNums},#{particiNums},#{plantsNums}) 
+
+<!-- INSERT INTO tb_Summery(id,date,vistorNums,particiNums,plantsNums) VALUES (NULL,NOW(),#{vistorNums},#{particiNums},#{plantsNums}) 
+select tb_Summery
+(NUll,NOW(),${vistorNums},${particiNums},#{plantsNums}
+where  exists(select date from tb_Summery where date = now()); -->
+
+<!--  insert into tb_Summery(vistorNums,particiNums,plantsNums)
+select tb_Summery
+${vistorNums},${particiNums},#{plantsNums}
+where not exists(select particiNums from tb_Summery where particiNums = #{particiNums});
+ -->
+
+
+<!-- INSERT INTO tb_Summery (tb_Summery.date,tb_Summery.vistorNums,tb_Summery.particiNums,tb_Summery.plantsNums) values NOW(),#{vistorNums},#{particiNums},#{plantsNums}
+SELECT NOW(),#{vistorNums},#{particiNums},#{plantsNums}
+ FROM DUAL WHERE EXISTS (SELECT * FROM tb_Summery u WHERE u.date=now()); -->
+</insert>
+
+<!-- 返回最新5天的list -->
+<select id="getSmmery" resultType="com.xiaohei.sp09.pojo.Summery">
+ SELECT DATE_FORMAT(date,'%m-%d')as date,vistorNums,particiNums,plantsNums FROM(SELECT DATE,vistorNums,particiNums,plantsNums FROM tb_summery  WHERE DATE IS NOT NULL ORDER BY DATE DESC,id DESC)AS t LIMIT 0,5
+ 
+</select> 
+
+</mapper>

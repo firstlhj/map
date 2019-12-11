@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaohei.sp09.mapper.ProvinceSortMapper">
+
+
+<select id="selectProvinceSort" resultType="com.xiaohei.sp09.pojo.ProvinceSort">
+ 
+ <!-- 联表查询 -->
+<!--  SELECT  province, COUNT(open_id) AS nums FROM
+ (SELECT  country ,province,open_id FROM 
+ (SELECT country,province,open_id FROM wechat_user WHERE open_id IN (SELECT  wechat_open_id FROM `order` WHERE STATUS=1))AS t1 WHERE province IS NOT NULL AND country ='中国') AS t2 
+ GROUP BY  province ORDER BY nums  DESC  LIMIT 6 -->
+  SELECT  province, COUNT(open_id) AS nums FROM
+ (SELECT  country ,province,open_id FROM 
+ (SELECT country,province,open_id FROM wechat_user WHERE open_id IN (SELECT  DISTINCT wechat_open_id FROM `order` WHERE STATUS=1 and amount=100))AS t1 WHERE province !="" AND country ='中国' AND province IS NOT NULL  AND province !='') AS t2 
+ GROUP BY  province ORDER BY nums  DESC  LIMIT 0,6 
+ 
+<!--    SELECT  province, COUNT(open_id) AS nums FROM
+ (SELECT  country ,province,open_id FROM 
+ (SELECT country,province,open_id FROM wechat_user WHERE open_id IN (SELECT  DISTINCT wechat_open_id FROM `order` WHERE STATUS=1 and amount=100))AS t1 
+ <WHERE>
+  <if test="province IS NOT NULL AND country ='中国'"> ) AS t2 
+ GROUP BY  province ORDER BY nums  DESC  LIMIT 6</if> 
+  <if test="country ='中国' AND province !=''"> ) AS t2 
+ GROUP BY  province ORDER BY nums  DESC  LIMIT 6</if>
+  
+  </WHERE> -->
+
+</select>
+<!-- 查询其他 -->
+<select id="selectOther" resultType="com.xiaohei.sp09.pojo.ProvinceSort">
+SELECT province as 其他 ,COUNT(open_id)AS nums FROM 
+ (SELECT country,province,open_id FROM wechat_user WHERE open_id IN 
+ (SELECT DISTINCT wechat_open_id FROM `order` WHERE STATUS=1 and amount=100))AS t1 
+ WHERE country NOT LIKE '%中国%'OR country IS NULL OR province IS NULL OR province =''OR province ="";
+</select>
+</mapper>

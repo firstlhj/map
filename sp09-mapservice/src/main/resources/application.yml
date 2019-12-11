@@ -1,0 +1,51 @@
+
+#正式服务器8101
+server:
+  port: 8102
+  
+spring:
+  redis:
+    database: 9  #正式为0
+    host: 120.24.168.210
+    port: 6379
+    password: Admin123456
+    lettuce:
+      pool:
+        max-active: 8
+        max-wait: 1
+        max-idle: 8
+        min-idle: 0
+        
+
+ # 数据源配置
+  datasource:
+     driver-class-name: com.mysql.jdbc.Driver
+     url: jdbc:mysql://120.24.168.210:3306/shaosan?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf8&autoReconnect=true&allowMultiQueries=true
+     username: root
+     password: root888888
+    
+  #datasource:
+   # url: jdbc:mysql://120.24.168.210:3306/wechat_pay?serverTimezone=GMT%2B8&characterEncoding=utf-8&allowMultiQueries=true
+    #username: root
+    #password: root888888
+    #driver-class-name: com.mysql.cj.jdbc.Driver  
+    
+    
+#mybaits配置
+mybatis:
+  mapper-locations: classpath:/mybatis/mapper/*.xml #根据mapper.xml所在的目录设置
+  #type-aliases-package: 
+  configuration:
+    cacheEnabled: false
+    lazyLoadingEnabled: false
+    multipleResultSetsEnabled: true
+    useColumnLabel: true
+    useGeneratedKeys: true
+    autoMappingBehavior: PARTIAL
+    defaultExecutorType: SIMPLE
+    defaultStatementTimeout: 25
+    safeRowBoundsEnabled: false
+    mapUnderscoreToCamelCase: true
+    localCacheScope: SESSION
+    jdbcTypeForNull: OTHER
+    lazyLoadTriggerMethods: equals,clone,hashCode,toString
